@@ -88,7 +88,7 @@ func (bc *broadcast) Send(room, event string, args ...interface{}) {
 	defer bc.lock.RUnlock()
 
 	for _, connection := range bc.rooms[room] {
-		connection.Emit(event, args...)
+		go connection.Emit(event, args...)
 	}
 }
 
@@ -99,7 +99,7 @@ func (bc *broadcast) SendAll(event string, args ...interface{}) {
 
 	for _, connections := range bc.rooms {
 		for _, connection := range connections {
-			connection.Emit(event, args...)
+			go connection.Emit(event, args...)
 		}
 	}
 }
